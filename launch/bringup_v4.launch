@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <!--
-  Usage:
-    roslaunch cr5_bringup cr5_bringup.launch robot_ip:=<value>
+  Usage (DOBOT_TYPE must already be exported, for example cr5):
+    roslaunch dobot_v4_bringup bringup_v4.launch robotIp:=192.168.1.80
 -->
 <launch>
 
-  <!-- robot_ip: IP-address of the robot's socket-messaging server -->
+  <!-- robotIp: IP address of the controller socket server -->
   <arg name="robotIp" doc="IP of the controller" default="192.168.1.80"/>
   <arg name="robotName" doc="Name of the controller" default=""/>
 
