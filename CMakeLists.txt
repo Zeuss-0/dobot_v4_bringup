@@ -232,6 +232,8 @@ add_executable(${PROJECT_NAME}
           src/main.cpp
           src/tcp_socket.cpp
           src/parseTool.cpp
+          src/http_api_types.cpp
+          src/http_server.cpp
           )
 
 ## Rename C++ executable without prefix
@@ -247,6 +249,7 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}
   ${catkin_LIBRARIES}
+  pthread
 )
 
 #############

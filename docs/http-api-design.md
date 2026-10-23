@@ -63,7 +63,17 @@ POST /api/v1/control/emergency_stop
 - 500：ROS service 或机器人连接异常。
 - `data` 保存 ROS service response 中除 `res` 外的返回字段；`res` 统一映射到 `code`，同时保留在 `data.res`。
 
-## 信息接口
+## 当前已实现的信息接口
+
+当前代码已经实现：
+
+- `GET /api/v1/health`
+- `GET /api/v1/info/joint_state`
+- `GET /api/v1/info/tool_pose`
+
+其余信息接口按下方清单继续接入时，路由命名和 JSON 映射保持一致。
+
+## 信息接口规划
 
 包括：
 
@@ -77,7 +87,22 @@ POST /api/v1/control/emergency_stop
 - `CalcTool`、`CalcUser`
 - `/dobot_v4_bringup/msg/RobotStatus` 和 `/dobot_v4_bringup/msg/ToolVectorActual` 的健康/状态汇总
 
-## 控制接口
+## 当前已实现的控制接口
+
+当前代码已经实现：
+
+- `POST /api/v1/control/enable`
+- `POST /api/v1/control/disable`
+- `POST /api/v1/control/clear_error`
+- `POST /api/v1/control/stop`
+- `POST /api/v1/control/pause`
+- `POST /api/v1/control/continue`
+- `POST /api/v1/control/power_on`
+- `POST /api/v1/control/emergency_stop`，请求体可传 `{ "value": 1 }`
+
+这些接口通过 ROS service client 调用现有服务，不改变原有机器人控制回调。
+
+## 控制接口规划
 
 包括：
 
