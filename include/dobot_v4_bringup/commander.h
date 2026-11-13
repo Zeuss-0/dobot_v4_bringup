@@ -966,12 +966,15 @@ private:
 
                 recv_ptr = recv_ptr + strlen(recv_ptr);
             }
-            result = regexRecv(std::string(buf));
-            if (result.size() >= 2U) {
-                if (stoi(result[0]) == 0) {
-                    err_id = stoi(result[1]);
-                } else {
-                    err_id = 2147483647;    // int-max
+            const std::string raw_response(buf);
+            result = regexRecv(raw_response);
+            const std::size_t comma_pos = raw_response.find(',');
+            if (comma_pos != std::string::npos) {
+                try {
+                    // 返回字符串第一个字段才是 ErrorID
+                    err_id = std::stoi(raw_response.substr(0, comma_pos));
+                } catch (const std::exception&) {
+                    err_id = -1;
                 }
             }
 
