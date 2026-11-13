@@ -198,17 +198,27 @@ std::string parserStartPathRequest2String(dobot_v4_bringup::StartPath::Request& 
     ROS_INFO("order:%s", stringOrder.c_str());
     return stringOrder;
 }
-std::string parserPositiveKinRequest2String(dobot_v4_bringup::PositiveKin::Request& request)
+std::string parserPositiveKinRequest2String(
+    dobot_v4_bringup::PositiveKin::Request& request)
 {
     std::stringstream ss;
+
     ss << "PositiveKin(";
-    ss << request.J1 << "," << request.J2 << "," << request.J3 << "," << request.J4 << "," << request.J5 << ","
-       << request.J6 << ",";
+    ss << request.J1 << ","
+       << request.J2 << ","
+       << request.J3 << ","
+       << request.J4 << ","
+       << request.J5 << ","
+       << request.J6;
+
     if (request.user != "")
         ss << ",user=" << request.user;
+
     if (request.tool != "")
-        ss << ", tool=" << request.tool;
+        ss << ",tool=" << request.tool;
+
     ss << ")";
+
     return ss.str();
 }
 std::string parserInverseKinRequest2String(dobot_v4_bringup::InverseKin::Request& request)

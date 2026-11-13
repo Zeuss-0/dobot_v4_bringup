@@ -14,6 +14,9 @@
 #include <ros/ros.h>
 #include <ros/param.h>
 #include <dobot_v4_bringup/cr5_v4_robot.h>
+#include <vector>
+#include <string>
+#include <sstream>
 
 // #include <dobot_v4_bringup/parseTool.h>
 
@@ -776,10 +779,47 @@ bool CRRobot::startPath(dobot_v4_bringup::StartPath::Request& request, dobot_v4_
     return commander_->callRosService(parseTool::parserStartPathRequest2String(request), response.res);
 }
 
-bool CRRobot::positiveKin(dobot_v4_bringup::PositiveKin::Request& request,
-                          dobot_v4_bringup::PositiveKin::Response& response)
+bool CRRobot::positiveKin(
+    dobot_v4_bringup::PositiveKin::Request& request,
+    dobot_v4_bringup::PositiveKin::Response& response)
 {
-    return commander_->callRosService(parseTool::parserPositiveKinRequest2String(request), response.res);
+    std::vector<std::string> result;
+
+    const std::string command =
+        parseTool::parserPositiveKinRequest2String(request);
+
+    bool success = commander_->callRosService(
+        command,
+        response.res,
+        result);
+
+    response.pose.clear();
+
+    // result[0] 是错误码；
+    // result[1]~result[12] 是 6 个位姿值，每个值被拆成整数部分和小数部分
+    if (response.res == 0 && result.size() >= 13)
+    {
+        std::ostringstream pose_stream;
+
+        for (int i = 0; i < 6; ++i)
+        {
+            if (i > 0)
+            {
+                pose_stream << ",";
+            }
+
+            const std::size_t integer_index = 1 + i * 2;
+            const std::size_t decimal_index = integer_index + 1;
+
+            pose_stream << result[integer_index]
+                        << "."
+                        << result[decimal_index];
+        }
+
+        response.pose = pose_stream.str();
+    }
+
+    return success;
 }
 
 bool CRRobot::inverseKin(dobot_v4_bringup::InverseKin::Request& request,
